@@ -1,8 +1,8 @@
 package com.basiv.server.Resources;
 
 import com.basiv.server.Exceptions.DataNotFoundException;
-import com.basiv.server.Models.Match;
-import com.basiv.server.Services.MatchService;
+import com.basiv.server.Models.Team;
+import com.basiv.server.Services.TeamService;
 import java.net.URI;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -21,38 +21,37 @@ import javax.ws.rs.core.UriInfo;
 /**
  * @author Henriksveen
  */
-@Path("/matches")
+@Path("/teams")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class MatchResource {
-
-    MatchService matchService = new MatchService();
+public class TeamResource {
+     TeamService teamService = new TeamService();
 
     @GET
-    public Response getMatches() {
-        return Response.ok().entity(matchService.getMatches()).header("Access-Control-Allow-Origin", "*").build();
+    public Response getTeams() {
+        return Response.ok().entity(teamService.getTeams()).header("Access-Control-Allow-Origin", "*").build();
     }
 
     @GET
-    @Path("{matchId}")
-    public Response getMatch(@PathParam("matchId") String matchId) {
+    @Path("{teamId}")
+    public Response getTeam(@PathParam("teamId") String teamId) {
         try {
-            return Response.ok().entity(matchService.getMatch(matchId)).header("Access-Control-Allow-Origin", "*").build();
+            return Response.ok().entity(teamService.getTeam(teamId)).header("Access-Control-Allow-Origin", "*").build();
         } catch (DataNotFoundException e) {
             return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 
     @POST
-    public Response addMatch(Match match, @Context UriInfo uriInfo) {
-        Match newMatch = matchService.addMatch(match);
-        if(newMatch == null){
+    public Response addTeam(Team team, @Context UriInfo uriInfo) {
+        Team newTeam = teamService.addTeam(team);
+        if(newTeam == null){
             return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
         }
-        String newId = String.valueOf(newMatch.getId());
-        URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build(); //locationheader: basiv-server/webapi/matches/ + id
+        String newId = String.valueOf(newTeam.getId());
+        URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build(); //locationheader: basiv-server/webapi/teams/ + id
         return Response.created(uri) //created --> statuscode 201, legger til header
-                .entity(newMatch)
+                .entity(newTeam)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "*")
                 .build();
@@ -69,11 +68,11 @@ public class MatchResource {
     }
 
     @PUT
-    @Path("/{matchId}")
-    public Response updateMatch(@PathParam("matchId") String matchId, Match match) {
-        match.setId(matchId);
+    @Path("/{teamId}")
+    public Response updateTeam(@PathParam("teamId") String teamId, Team team) {
+        team.setId(teamId);
         return Response.ok()
-                .entity(matchService.updateMatch(match))
+                .entity(teamService.updateTeam(team))
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "*")
                 .build();
@@ -81,7 +80,7 @@ public class MatchResource {
     }
 
     @OPTIONS
-    @Path("/{matchId}")
+    @Path("/{teamId}")
     public Response acceptPut() {
         Response.ResponseBuilder rb = Response.ok();
         rb.header("Access-Control-Allow-Origin", "*");
@@ -91,8 +90,8 @@ public class MatchResource {
     }
 
     @DELETE
-    @Path("/{matchId}")
-    public void deleteMatch(@PathParam("matchId") String matchId) {
-        matchService.deleteMatch(matchId);
+    @Path("/{teamId}")
+    public void deleteTeam(@PathParam("teamId") String teamId) {
+        teamService.deleteTeam(teamId);
     }
 }

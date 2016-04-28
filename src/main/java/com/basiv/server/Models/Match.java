@@ -1,6 +1,8 @@
 package com.basiv.server.Models;
 
 import java.util.Date;
+import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Index;
@@ -19,16 +21,28 @@ public class Match {
     private Date dateCreated;
     private Date liveStart;
     private boolean isLive;
+    private String matchName;
+    private Team[] teams;
 
     public Match() {
 
     }
 
-    public Match(String id, Date liveStart) {
+    public Match(String id, Date liveStart, String matchName, Team[] team) {
         this.id = id;
         this.dateCreated = new Date();
         this.liveStart = liveStart;
         this.isLive = false;
+        this.matchName = matchName;
+        this.teams = team;
+    }
+
+    public String getMatchName() {
+        return matchName;
+    }
+
+    public void setMatchName(String matchName) {
+        this.matchName = matchName;
     }
 
     public Date getDateCreated() {
@@ -63,9 +77,16 @@ public class Match {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Match{" + "id=" + id + ", dateCreated=" + dateCreated + ", liveStart=" + liveStart + ", isLive=" + isLive + '}';
+    public Team[] getTeams() {
+        return teams;
     }
 
+    public void setTeams(Team[] teams) {
+        this.teams = teams;
+    }
+
+    @Override
+    public String toString() {
+        return "Match{" + "id=" + id + ", dateCreated=" + dateCreated + ", liveStart=" + liveStart + ", isLive=" + isLive + ", matchName=" + matchName + '}';
+    }
 }
