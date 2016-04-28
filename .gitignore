@@ -1,0 +1,6 @@
+# Ignore thezee #
+/target
+hs_err_pid5824.log
+licenseheader.txt
+nb-configuration.xml
+replay_pid5824.log
