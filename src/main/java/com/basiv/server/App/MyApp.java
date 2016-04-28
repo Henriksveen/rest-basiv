@@ -4,6 +4,7 @@ import com.basiv.server.Resources.AuthResource;
 import com.basiv.server.Resources.ImageResource;
 import com.basiv.server.Resources.MatchResource;
 import com.basiv.server.Resources.ProfileResource;
+import com.basiv.server.Resources.TeamResource;
 import com.basiv.server.Resources.Testt;
 import com.basiv.socket.websocket.CommentSessionHandler;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ public class MyApp extends Application {
         resources.add(ImageResource.class);
         resources.add(Testt.class);
         resources.add(MatchResource.class);
+        resources.add(TeamResource.class);
         resources.add(AuthResource.class); 
         resources.add(ProfileResource.class); 
  
