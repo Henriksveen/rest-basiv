@@ -48,6 +48,7 @@ public class MatchResource {
         return Response.created(uri) //created --> statuscode 201, legger til header
                 .entity(newMatch)
                 .build();
+
     }
 
     @PUT
