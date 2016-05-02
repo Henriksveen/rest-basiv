@@ -8,7 +8,7 @@ import org.mongodb.morphia.annotations.Id;
  * @author Henriksveen
  */
 @Entity("teams")
-public class Team {
+public class TeamEntity {
 
     @Id
     private String id;
@@ -17,11 +17,11 @@ public class Team {
     private String location;
     private String[] members;
 
-    public Team() {
+    public TeamEntity() {
 
     }
 
-    public Team(String name, String coach, String location,String[] members) {
+    public TeamEntity(String name, String coach, String location,String[] members) {
         this.name = name;
         this.coach = coach;
         this.location = location;

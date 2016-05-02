@@ -1,7 +1,7 @@
 package com.basiv.server.Resources;
 
 import com.basiv.server.Exceptions.DataNotFoundException;
-import com.basiv.server.Models.Team;
+import com.basiv.server.Models.TeamEntity;
 import com.basiv.server.Services.TeamService;
 import java.net.URI;
 import javax.ws.rs.Consumes;
@@ -43,8 +43,8 @@ public class TeamResource {
     }
 
     @POST
-    public Response addTeam(Team team, @Context UriInfo uriInfo) {
-        Team newTeam = teamService.addTeam(team);
+    public Response addTeam(TeamEntity team, @Context UriInfo uriInfo) {
+        TeamEntity newTeam = teamService.addTeam(team);
         if(newTeam == null){
             return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
         }
@@ -69,7 +69,7 @@ public class TeamResource {
 
     @PUT
     @Path("/{teamId}")
-    public Response updateTeam(@PathParam("teamId") String teamId, Team team) {
+    public Response updateTeam(@PathParam("teamId") String teamId, TeamEntity team) {
         team.setId(teamId);
         return Response.ok()
                 .entity(teamService.updateTeam(team))

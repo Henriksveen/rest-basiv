@@ -1,6 +1,6 @@
 package com.basiv.server.Resources;
 
-import com.basiv.server.Models.Match;
+import com.basiv.server.Models.MatchEntity;
 import com.basiv.server.Services.ImageService;
 import java.io.InputStream;
 import java.net.URI;
@@ -28,7 +28,7 @@ public class ImageResource {
     ImageService service = new ImageService();
     
     @GET
-    public List<Match> getMatches() {
+    public List<MatchEntity> getMatches() {
         System.out.println("LISTE!");
         System.out.println("TEST");
         return null;

@@ -1,12 +1,12 @@
 package com.basiv.server.Services;
 
 import com.basiv.server.Exceptions.DataNotFoundException;
-import com.basiv.server.Models.Match;
-import com.basiv.server.Models.Team;
+import com.basiv.server.Models.MatchEntity;
+import com.basiv.server.Models.ScoreEntity;
+import com.basiv.server.Models.TeamEntity;
 import com.basiv.server.config.MongoDB;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Stack;
 import java.util.UUID;
 import java.util.logging.Logger;
 import org.mongodb.morphia.Datastore;
@@ -19,29 +19,28 @@ public class MatchService {
 
     private static final Logger LOG = Logger.getLogger(MatchService.class.getName());
     private final Datastore mongoDatastore;
-
     public MatchService() {
         this.mongoDatastore = MongoDB.instance().getDatabase();
     }
 
-    public Match getMatch(String id) {
-        Match match = mongoDatastore.createQuery(Match.class).filter("id =", id).get();
+    public MatchEntity getMatch(String id) {
+        MatchEntity match = mongoDatastore.get(MatchEntity.class, id);
         if (match == null) {
             throw new DataNotFoundException("Match with id " + id + " notfound.");
         }
         return match;
     }
 
-    public List<Match> getMatches() {
-        return mongoDatastore.createQuery(Match.class).asList();
+    public List<MatchEntity> getMatches() {
+        return mongoDatastore.createQuery(MatchEntity.class).asList();
     }
 
-    public Match addMatch(Match match) {
-        Team[] helpArray = new Team[match.getTeams().length];
+    public MatchEntity addMatch(MatchEntity match) {
+        TeamEntity[] helpArray = new TeamEntity[match.getTeams().length];
         int counter = 0;
-        for (Team t : match.getTeams()) {
+        for (TeamEntity t : match.getTeams()) {
             if (t.getLocation() == null && t.getCoach() == null && t.getName() == null) {
-                Team getTeam = mongoDatastore.createQuery(Team.class).filter("id =", t.getId()).get();
+                TeamEntity getTeam = mongoDatastore.get(TeamEntity.class, t.getId());
                 helpArray[counter] = getTeam;
             } else {
                 t.setId(UUID.randomUUID().toString());
@@ -50,8 +49,10 @@ public class MatchService {
             }
             counter++;
         }
+        match.setScore(new ScoreEntity());
         match.setTeams(helpArray);
         match.setId(UUID.randomUUID().toString());
+        match.setDateCreated(new Date());
         Key k = mongoDatastore.save(match);
         if (k == null) {
             return null;
@@ -59,13 +60,13 @@ public class MatchService {
         return match;
     }
 
-    public Match updateMatch(Match match) {
+    public MatchEntity updateMatch(MatchEntity match) {
         mongoDatastore.save(match);
         return match;
     }
 
     public void deleteMatch(String id) {
-        Match match = mongoDatastore.createQuery(Match.class).filter("id =", id).get();
+        MatchEntity match = mongoDatastore.createQuery(MatchEntity.class).filter("id =", id).get();
         if (match == null) {
             throw new DataNotFoundException("Match with id " + id + " notfound.");
         }

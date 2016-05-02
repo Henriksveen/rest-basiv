@@ -1,7 +1,7 @@
 package com.basiv.server.Services;
 
 import com.basiv.server.Exceptions.DataNotFoundException;
-import com.basiv.server.Models.Team;
+import com.basiv.server.Models.TeamEntity;
 import com.basiv.server.config.MongoDB;
 import java.util.List;
 import java.util.UUID;
@@ -20,19 +20,19 @@ public class TeamService {
         this.mongoDatastore = MongoDB.instance().getDatabase();
     }
 
-    public Team getTeam(String id) {
-        Team team = mongoDatastore.createQuery(Team.class).filter("id =", id).get();
+    public TeamEntity getTeam(String id) {
+        TeamEntity team = mongoDatastore.createQuery(TeamEntity.class).filter("id =", id).get();
         if (team == null) {
             throw new DataNotFoundException("Team with id " + id + " notfound.");
         }
         return team;
     }
 
-    public List<Team> getTeams() {
-        return mongoDatastore.createQuery(Team.class).asList();
+    public List<TeamEntity> getTeams() {
+        return mongoDatastore.createQuery(TeamEntity.class).asList();
     }
 
-    public Team addTeam(Team team) {
+    public TeamEntity addTeam(TeamEntity team) {
         team.setId(UUID.randomUUID().toString());
         Key k = mongoDatastore.save(team);
         if (k == null) {
@@ -41,13 +41,13 @@ public class TeamService {
         return team;
     }
 
-    public Team updateTeam(Team team) {
+    public TeamEntity updateTeam(TeamEntity team) {
         mongoDatastore.save(team);
         return team;
     }
 
     public void deleteTeam(String id) {
-        Team team = mongoDatastore.createQuery(Team.class).filter("id =", id).get();
+        TeamEntity team = mongoDatastore.createQuery(TeamEntity.class).filter("id =", id).get();
         if (team == null) {
             throw new DataNotFoundException("Team with id " + id + " notfound.");
         }

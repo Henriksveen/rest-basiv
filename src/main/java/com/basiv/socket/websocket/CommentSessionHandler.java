@@ -22,7 +22,7 @@ import javax.json.spi.JsonProvider;
 import javax.websocket.Session;
 import com.basiv.server.config.MongoDB;
 import com.basiv.socket.model.Comment;
-import com.basiv.server.Models.Match;
+import com.basiv.server.Models.MatchEntity;
 import java.util.Collection;
 import com.basiv.socket.config.SocketConstants;
 import org.mongodb.morphia.Datastore;
@@ -44,8 +44,8 @@ public class CommentSessionHandler {
     //TODO should be called on inject
     public void preLoadMatches(){
         
-        List<Match> list = db.find(Match.class).asList();
-        for (Match c : list) {
+        List<MatchEntity> list = db.find(MatchEntity.class).asList();
+        for (MatchEntity c : list) {
             mapSession.put(c.getId(), new ArrayList<Session>());
             System.out.println("-Adding match with empty sessions to list. Id: " + c.getId());
         }

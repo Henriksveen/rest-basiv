@@ -1,11 +1,11 @@
 package com.basiv.server.App;
 
+import com.basiv.server.MessageBodyWriters.ArrayListMessageBodyWriter;
 import com.basiv.server.Resources.AuthResource;
 import com.basiv.server.Resources.ImageResource;
 import com.basiv.server.Resources.MatchResource;
 import com.basiv.server.Resources.ProfileResource;
 import com.basiv.server.Resources.TeamResource;
-import com.basiv.server.Resources.Testt;
 import com.basiv.socket.websocket.CommentSessionHandler;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,18 +26,18 @@ public class MyApp extends Application {
 
         // Add your resources.
         resources.add(ImageResource.class);
-        resources.add(Testt.class);
         resources.add(MatchResource.class);
         resources.add(TeamResource.class);
-        resources.add(AuthResource.class); 
-        resources.add(ProfileResource.class); 
- 
+        resources.add(AuthResource.class);
+        resources.add(ProfileResource.class);
+
         // Add additional features such as support for Multipart.
         resources.add(MultiPartFeature.class);
+        resources.add(ArrayListMessageBodyWriter.class);
 
         return resources;
     }
-    
+
 //    public MyApp(){
 //        this.getClasses().add(ImageResource.class);
 //        this.getClasses().add(Testt.class);

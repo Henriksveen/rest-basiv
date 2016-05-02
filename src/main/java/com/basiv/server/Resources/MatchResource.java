@@ -1,12 +1,14 @@
 package com.basiv.server.Resources;
 
 import com.basiv.server.Exceptions.DataNotFoundException;
-import com.basiv.server.Models.Match;
+import com.basiv.server.Models.MatchEntity;
+import com.basiv.server.Services.ImageService;
 import com.basiv.server.Services.MatchService;
 import java.net.URI;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -27,6 +29,7 @@ import javax.ws.rs.core.UriInfo;
 public class MatchResource {
 
     MatchService matchService = new MatchService();
+    ImageService imageService = new ImageService();
 
     @GET
     public Response getMatches() {
@@ -37,16 +40,20 @@ public class MatchResource {
     @Path("{matchId}")
     public Response getMatch(@PathParam("matchId") String matchId) {
         try {
-            return Response.ok().entity(matchService.getMatch(matchId)).header("Access-Control-Allow-Origin", "*").build();
+            return Response.ok()
+                    .entity(matchService.getMatch(matchId))
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         } catch (DataNotFoundException e) {
             return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
         }
     }
 
     @POST
-    public Response addMatch(Match match, @Context UriInfo uriInfo) {
-        Match newMatch = matchService.addMatch(match);
-        if(newMatch == null){
+    public Response addMatch(MatchEntity match, @Context UriInfo uriInfo, @HeaderParam("userId") String userId) {
+        System.out.println(userId);
+        MatchEntity newMatch = matchService.addMatch(match);
+        if (newMatch == null) {
             return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
         }
         String newId = String.valueOf(newMatch.getId());
@@ -64,13 +71,13 @@ public class MatchResource {
         Response.ResponseBuilder rb = Response.ok();
         rb.header("Access-Control-Allow-Origin", "*");
         rb.header("Access-Control-Allow-Methods", "POST");
-        rb.header("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin, Accept");
+        rb.header("Access-Control-Allow-Headers", "accept, access-control-allow-headers, access-control-allow-origin, content-type");
         return rb.build();
     }
 
     @PUT
     @Path("/{matchId}")
-    public Response updateMatch(@PathParam("matchId") String matchId, Match match) {
+    public Response updateMatch(@PathParam("matchId") String matchId, MatchEntity match) {
         match.setId(matchId);
         return Response.ok()
                 .entity(matchService.updateMatch(match))

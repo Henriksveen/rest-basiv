@@ -13,7 +13,7 @@ import org.mongodb.morphia.annotations.Property;
  * @author Henriksveen
  */
 @Entity("matches")
-public class Match {
+public class MatchEntity {
 
     @Id
     private String id;
@@ -22,19 +22,15 @@ public class Match {
     private Date liveStart;
     private boolean isLive;
     private String matchName;
-    private Team[] teams;
+    private TeamEntity[] teams;
+    private ScoreEntity score;
+    private String category;
+    private String twitchUrl;
+    private String description;
+    private String imageSrc;
 
-    public Match() {
+    public MatchEntity() {
 
-    }
-
-    public Match(String id, Date liveStart, String matchName, Team[] team) {
-        this.id = id;
-        this.dateCreated = new Date();
-        this.liveStart = liveStart;
-        this.isLive = false;
-        this.matchName = matchName;
-        this.teams = team;
     }
 
     public String getMatchName() {
@@ -77,16 +73,51 @@ public class Match {
         this.id = id;
     }
 
-    public Team[] getTeams() {
+    public TeamEntity[] getTeams() {
         return teams;
     }
 
-    public void setTeams(Team[] teams) {
+    public void setTeams(TeamEntity[] teams) {
         this.teams = teams;
     }
 
-    @Override
-    public String toString() {
-        return "Match{" + "id=" + id + ", dateCreated=" + dateCreated + ", liveStart=" + liveStart + ", isLive=" + isLive + ", matchName=" + matchName + '}';
+    public ScoreEntity getScore() {
+        return score;
+    }
+
+    public void setScore(ScoreEntity score) {
+        this.score = score;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getTwitchUrl() {
+        return twitchUrl;
+    }
+
+    public void setTwitchUrl(String twitchUrl) {
+        this.twitchUrl = twitchUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 }

@@ -6,7 +6,7 @@
 
 package com.basiv.server.Resources;
 
-import com.basiv.server.Models.Match;
+import com.basiv.server.Models.MatchEntity;
 import com.basiv.server.Models.UserEntity;
 import com.basiv.server.Services.ImageService;
 import java.util.List;
