@@ -2,7 +2,7 @@ package com.basiv.server.Resources;
 
 import com.basiv.server.Exceptions.DataNotFoundException;
 import com.basiv.server.Models.MatchEntity;
-import com.basiv.server.Services.ImageService;
+import com.basiv.server.Services.AuthService;
 import com.basiv.server.Services.MatchService;
 import java.net.URI;
 import javax.ws.rs.Consumes;
@@ -29,7 +29,7 @@ import javax.ws.rs.core.UriInfo;
 public class MatchResource {
 
     MatchService matchService = new MatchService();
-    ImageService imageService = new ImageService();
+    AuthService authService = new AuthService();
 
     @GET
     public Response getMatches() {
@@ -50,20 +50,22 @@ public class MatchResource {
     }
 
     @POST
-    public Response addMatch(MatchEntity match, @Context UriInfo uriInfo, @HeaderParam("userId") String userId) {
-        System.out.println(userId);
-        MatchEntity newMatch = matchService.addMatch(match);
-        if (newMatch == null) {
-            return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
+    public Response addMatch(MatchEntity match, @Context UriInfo uriInfo, @HeaderParam("googleId") String googleId, @HeaderParam("token") String token) {
+        if (authService.checkToken(googleId, token)) {
+            MatchEntity newMatch = matchService.addMatch(match);
+            if (newMatch == null) {
+                return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
+            }
+            String newId = String.valueOf(newMatch.getId());
+            URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build(); //locationheader: basiv-server/webapi/matches/ + id
+            return Response.created(uri) //created --> statuscode 201, legger til header
+                    .entity(newMatch)
+                    .header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        } else {
+            return Response.status(401).header("Access-Control-Allow-Origin", "*").build();
         }
-        String newId = String.valueOf(newMatch.getId());
-        URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build(); //locationheader: basiv-server/webapi/matches/ + id
-        return Response.created(uri) //created --> statuscode 201, legger til header
-                .entity(newMatch)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "*")
-                .build();
-
     }
 
     @OPTIONS
@@ -71,20 +73,25 @@ public class MatchResource {
         Response.ResponseBuilder rb = Response.ok();
         rb.header("Access-Control-Allow-Origin", "*");
         rb.header("Access-Control-Allow-Methods", "POST");
-        rb.header("Access-Control-Allow-Headers", "accept, access-control-allow-headers, access-control-allow-origin, content-type");
+        rb.header("Access-Control-Allow-Headers", "accept, access-control-allow-origin, content-type, token, googleid");
+//        rb.header("Access-Control-Allow-Headers", "accept, access-control-allow-headers, access-control-allow-origin, content-type");
         return rb.build();
     }
 
     @PUT
     @Path("/{matchId}")
-    public Response updateMatch(@PathParam("matchId") String matchId, MatchEntity match) {
-        match.setId(matchId);
-        return Response.ok()
-                .entity(matchService.updateMatch(match))
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "*")
-                .build();
+    public Response updateMatch(@PathParam("matchId") String matchId, MatchEntity match, @HeaderParam("googleId") String googleId, @HeaderParam("token") String token) {
+        if (authService.checkToken(googleId, token)) {
+            match.setId(matchId);
 
+            return Response.ok()
+                    .entity(matchService.updateMatch(match))
+                    .header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        } else {
+            return Response.status(401).header("Access-Control-Allow-Origin", "*").build();
+        }
     }
 
     @OPTIONS
@@ -93,7 +100,7 @@ public class MatchResource {
         Response.ResponseBuilder rb = Response.ok();
         rb.header("Access-Control-Allow-Origin", "*");
         rb.header("Access-Control-Allow-Methods", "PUT");
-        rb.header("Access-Control-Allow-Headers", "Content-Type, Accept");
+        rb.header("Access-Control-Allow-Headers", "Content-Type, Accept, token, googleid");
         return rb.build();
     }
 

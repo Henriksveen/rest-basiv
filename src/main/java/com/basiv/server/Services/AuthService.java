@@ -45,6 +45,7 @@ public class AuthService {
     public AuthService() {
         this.mongoDatastore = MongoDB.instance().getDatabase();
     }
+
     /*
      Google response on OK:
      issued_to
@@ -53,18 +54,17 @@ public class AuthService {
      scope
      expires_in
      access_type
-     */   
-
+     */
     public UserEntity authenticateToken(AuthEntity ent) throws MalformedURLException {
         try {
             System.out.println("Authenticated locally stored token on user_id: " + ent.getUser_id());
             //Kjør egen metode for dette
-            
-            if(ent.getUser_id() != null){
-                if(!isTokenExpired(ent.getUser_id())){
+
+            if (ent.getUser_id() != null) {
+                if (!isTokenExpired(ent.getUser_id())) {
                     System.out.println("TOKEN NOT EXPIRED");
                     return mongoDatastore.createQuery(UserEntity.class).filter("googleId", ent.getUser_id()).get();
-                }else{
+                } else {
                     System.out.println("TOKEN IS EXPIRED");
                 }
                 //return database data instead?
@@ -84,6 +84,7 @@ public class AuthService {
                     LOG.log(Level.INFO, "Token validated: {0}", obj.getString("issued_to"));
                     LOG.log(Level.INFO, "Expires in: {0}", String.valueOf(obj.getInt("expires_in")));
                     ValidatedToken token = createToken(obj.keySet().toArray(), obj);
+                    token.setToken(ent);
                     Key<ValidatedToken> key = mongoDatastore.save(token);
                     LOG.log(Level.INFO, "KEY: {0}, User ID: {1}", new Object[]{key.getId(), token.getUser_id()});
 
@@ -94,6 +95,7 @@ public class AuthService {
                         //TODO sjekk database om user_id finnes fra før også
                         user = new UserEntity();
                         user.setId(UUID.randomUUID().toString());
+
                         user.setGoogleId(obj.getString("user_id"));
                         mongoDatastore.save(user);
                     }//Mer logikk her?
@@ -109,33 +111,51 @@ public class AuthService {
         }
         return null;
     }
-    
-    private boolean isTokenExpired(String user_id){
+
+    private boolean isTokenExpired(String user_id) {
         ValidatedToken token = mongoDatastore.get(ValidatedToken.class, user_id);
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         return !token.getExpires_at().after(cal.getTime());
-        
+
     }
-    
-    private boolean isTokenExpired(){
+
+    private boolean isTokenExpired(ValidatedToken token) {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        return !token.getExpires_at().after(cal.getTime());
+
+    }
+
+    private boolean isTokenExpired() {
         return false;
     }
-    
-    private Date getExpiresAt(int time){
+
+    private Date getExpiresAt(int time) {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         cal.add(Calendar.SECOND, time);
-        System.out.println("Token expires at:" + cal.getTime());  
+        System.out.println("Token expires at:" + cal.getTime());
         return cal.getTime();
     }
-    
-    void printJson(JsonObject obj){
+
+    void printJson(JsonObject obj) {
         //TODO 
         Object[] set = obj.keySet().toArray();
         for (Object set1 : set) {
             LOG.info((String) set1);
         }
+    }
+
+    public boolean checkToken(String googleId, String token) {
+        ValidatedToken t = mongoDatastore.get(ValidatedToken.class, googleId);
+        if (!t.getToken().getAccess_token().equals(token)) {
+            return false;
+        }
+        if (isTokenExpired(t)) {
+            return false; //returns false if token is expired
+        }
+        return true;
     }
 
     private ValidatedToken createToken(Object[] set, JsonObject obj) {

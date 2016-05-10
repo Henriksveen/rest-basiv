@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.basiv.server.Models;
 
 import java.util.Date;
@@ -10,7 +5,6 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
 /**
- *
  * @author Ivar Østby
  */
 @Entity("validatedtokens")
@@ -22,6 +16,7 @@ public class ValidatedToken {
     String audience, scope, access_type;
     int expires_in;
     Date expires_at;
+    AuthEntity token;
 
     public ValidatedToken() {
 
@@ -81,6 +76,14 @@ public class ValidatedToken {
 
     public void setExpires_in(int expires_in) {
         this.expires_in = expires_in;
+    }
+
+    public AuthEntity getToken() {
+        return token;
+    }
+
+    public void setToken(AuthEntity token) {
+        this.token = token;
     }
 
 }

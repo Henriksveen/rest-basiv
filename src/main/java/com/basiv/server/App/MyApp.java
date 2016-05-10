@@ -6,7 +6,7 @@ import com.basiv.server.Resources.ImageResource;
 import com.basiv.server.Resources.MatchResource;
 import com.basiv.server.Resources.ProfileResource;
 import com.basiv.server.Resources.TeamResource;
-import com.basiv.socket.websocket.CommentSessionHandler;
+import com.basiv.server.Resources.UserResource;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.ApplicationPath;
@@ -30,6 +30,7 @@ public class MyApp extends Application {
         resources.add(TeamResource.class);
         resources.add(AuthResource.class);
         resources.add(ProfileResource.class);
+        resources.add(UserResource.class);
 
         // Add additional features such as support for Multipart.
         resources.add(MultiPartFeature.class);

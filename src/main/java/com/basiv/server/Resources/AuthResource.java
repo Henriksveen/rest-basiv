@@ -53,6 +53,7 @@ public class AuthResource {
     public Response validateToken(AuthEntity ent) throws IOException, GeneralSecurityException {
         UserEntity id = service.authenticateToken(ent);
         if(id != null){
+            
         return Response.ok().header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Request-Headers", "*")
                 .entity(id)

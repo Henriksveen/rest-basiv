@@ -1,18 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.basiv.server.Models;
 
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+
 /**
- * 
  * @author Ivar Østby
  */
 public class AuthEntity {
-    
-    String access_token, token_type, expires_in, user_id; 
+
+    String access_token, token_type, user_id, expires_in;
+
+    public AuthEntity() {
+    }
 
     public String getUser_id() {
         return user_id;
@@ -50,7 +49,5 @@ public class AuthEntity {
     public String toString() {
         return "AuthEntity{" + "access_token=" + access_token + ", token_type=" + token_type + ", expires_in=" + expires_in + '}';
     }
-
-    
 
 }

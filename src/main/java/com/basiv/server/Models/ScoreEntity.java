@@ -9,26 +9,26 @@ import org.mongodb.morphia.annotations.Id;
  */
 public class ScoreEntity {
 
-    private double score1 = 0;
-    private double score2 = 0;
+    private int score1 = 0;
+    private int score2 = 0;
     private Date[] time; //When the score is changed
 
     public ScoreEntity() {
     }
 
-    public double getScore1() {
+    public int getScore1() {
         return score1;
     }
 
-    public void setScore1(double score1) {
+    public void setScore1(int score1) {
         this.score1 = score1;
     }
 
-    public double getScore2() {
+    public int getScore2() {
         return score2;
     }
 
-    public void setScore2(double score2) {
+    public void setScore2(int score2) {
         this.score2 = score2;
     }
 
