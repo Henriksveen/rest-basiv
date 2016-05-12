@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.basiv.socket.websocket;
 
 import java.io.StringReader;
@@ -23,21 +22,21 @@ import javax.websocket.server.ServerEndpoint;
 import com.basiv.socket.model.Message;
 
 /**
- * 
+ *
  * @author Ivar Østby
  */
 @ApplicationScoped
 @ServerEndpoint("/chat")
 
 public class MessageWebSocketServer {
- 
+
     @Inject
     private MessageSessionHandler sessionHandler;
-    
+
     @OnOpen
-        public void open(Session session) {
-            System.out.println("NY TILKOBLING!");
-            sessionHandler.addSession(session);
+    public void open(Session session) {
+        System.out.println("NY TILKOBLING!");
+        sessionHandler.addSession(session);
     }
 
     @OnClose
@@ -51,8 +50,8 @@ public class MessageWebSocketServer {
     }
 
     @OnMessage
-        public void handleMessage(String message, Session session) {
-            System.out.println(message);
+    public void handleMessage(String message, Session session) {
+        System.out.println(message);
         try (JsonReader reader = Json.createReader(new StringReader(message))) {
             JsonObject jsonMessage = reader.readObject();
             System.out.println(jsonMessage);
@@ -60,14 +59,14 @@ public class MessageWebSocketServer {
                 //
                 Message m = new Message();
                 m.setId(jsonMessage.getString("id"));
-                if(!jsonMessage.isNull("author")){
-                    
+                if (!jsonMessage.isNull("author")) {
+
                     m.setAuthor(jsonMessage.getJsonObject("author").getString("nickname"));
                 }
-                
+
                 m.setSentAt(jsonMessage.getString("sentAt"));
                 m.setText(jsonMessage.getString("text"));
-                
+
                 m.setThread(jsonMessage.getJsonObject("thread"));
                 //System.out.println(jsonMessage.getJsonObject("thread"));
                 sessionHandler.addMessage(m);
@@ -82,6 +81,6 @@ public class MessageWebSocketServer {
                 int id = (int) jsonMessage.getInt("id");
                 sessionHandler.toggleMessage(id);
             }
+        }
     }
-}
 }

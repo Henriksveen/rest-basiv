@@ -1,7 +1,10 @@
 package com.basiv.server.App;
 
 import com.basiv.server.MessageBodyWriters.ArrayListMessageBodyWriter;
+import com.basiv.server.MessageBodyWriters.StringListMessageBodyWriter;
 import com.basiv.server.Resources.AuthResource;
+import com.basiv.server.Resources.CategoryResource;
+import com.basiv.server.Resources.HashtagResource;
 import com.basiv.server.Resources.ImageResource;
 import com.basiv.server.Resources.MatchResource;
 import com.basiv.server.Resources.ProfileResource;
@@ -31,10 +34,13 @@ public class MyApp extends Application {
         resources.add(AuthResource.class);
         resources.add(ProfileResource.class);
         resources.add(UserResource.class);
+        resources.add(CategoryResource.class);
+        resources.add(HashtagResource.class);
 
         // Add additional features such as support for Multipart.
         resources.add(MultiPartFeature.class);
         resources.add(ArrayListMessageBodyWriter.class);
+        resources.add(StringListMessageBodyWriter.class);
 
         return resources;
     }

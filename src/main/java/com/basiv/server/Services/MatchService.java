@@ -19,6 +19,7 @@ public class MatchService {
 
     private static final Logger LOG = Logger.getLogger(MatchService.class.getName());
     private final Datastore mongoDatastore;
+
     public MatchService() {
         this.mongoDatastore = MongoDB.instance().getDatabase();
     }
@@ -49,7 +50,8 @@ public class MatchService {
             }
             counter++;
         }
-        match.setScore(new ScoreEntity());
+        ScoreEntity[] scoreTab = {new ScoreEntity()};
+        match.setScore(scoreTab);
         match.setTeams(helpArray);
         match.setId(UUID.randomUUID().toString());
         match.setDateCreated(new Date());

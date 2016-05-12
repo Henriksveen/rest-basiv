@@ -11,7 +11,7 @@ public class ScoreEntity {
 
     private int score1 = 0;
     private int score2 = 0;
-    private Date[] time; //When the score is changed
+    private Date time; //When the score is changed
 
     public ScoreEntity() {
     }
@@ -32,11 +32,11 @@ public class ScoreEntity {
         this.score2 = score2;
     }
 
-    public Date[] getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Date[] time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 }

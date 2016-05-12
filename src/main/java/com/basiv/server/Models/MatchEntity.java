@@ -23,11 +23,12 @@ public class MatchEntity {
     private boolean isLive;
     private String matchName;
     private TeamEntity[] teams;
-    private ScoreEntity score;
+    private ScoreEntity[] score;
     private String category;
     private String twitchUrl;
     private String description;
     private String imageSrc;
+    private String eventEntitiesId;
 
     public MatchEntity() {
 
@@ -81,11 +82,11 @@ public class MatchEntity {
         this.teams = teams;
     }
 
-    public ScoreEntity getScore() {
+    public ScoreEntity[] getScore() {
         return score;
     }
 
-    public void setScore(ScoreEntity score) {
+    public void setScore(ScoreEntity[] score) {
         this.score = score;
     }
 
@@ -119,5 +120,13 @@ public class MatchEntity {
 
     public void setImageSrc(String imageSrc) {
         this.imageSrc = imageSrc;
+    }
+
+    public String getEventEntitiesId() {
+        return eventEntitiesId;
+    }
+
+    public void setEventEntitiesId(String eventEntitiesId) {
+        this.eventEntitiesId = eventEntitiesId;
     }
 }
