@@ -1,5 +1,6 @@
 package com.basiv.server.config;
 
+import com.basiv.server.Models.ScoreEntity;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.ServerAddress;
@@ -32,8 +33,10 @@ public class MongoDB {
         }
 
         //mongoClient.setWriteConcern(WriteConcern.SAFE);   //write operations will throw exceptions on failure 
-        datastore = new Morphia().mapPackage("com.basiv.server.Models") 
-                .createDatastore(mongoClient, DB_NAME);
+
+        Morphia morphia = new Morphia().mapPackage("com.basiv.server.Models");
+        morphia.map(ScoreEntity.class);
+        datastore = morphia.createDatastore(mongoClient, DB_NAME);
         datastore.ensureIndexes();
         LOG.info("Connection to database '" + DB_NAME + "' initialized");
     }

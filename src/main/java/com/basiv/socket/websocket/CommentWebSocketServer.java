@@ -23,11 +23,11 @@ import javax.websocket.server.ServerEndpoint;
 
 
 /**
- *
+ * DEPRECATED
  * @author Ivar Østby
  */
-@ApplicationScoped
-@ServerEndpoint("/feed")
+//@ApplicationScoped
+//@ServerEndpoint("/feed")
 
 public class CommentWebSocketServer {
     
@@ -90,6 +90,9 @@ public class CommentWebSocketServer {
                         break;
                     case "deletecomment":
                         sessionHandler.deletecomment(session, jsonMessage);
+                        break;
+                    case "updatescore":
+                        sessionHandler.updatescore(session, jsonMessage);
                         break;
                     case "add": //TODO REMOVE!
                     sessionHandler.newcomment(session, jsonMessage);

@@ -19,14 +19,20 @@ public class SocketConstants {
     public static String ACTION_NEWCOMMENT = "newcomment";
     public static String ACTION_UPDATECOMMENT = "updatecomment";
     public static String ACTION_DELETECOMMENT = "deletecomment";
+    public static String ACTION_UPDATESCORE = "updatescore";
     
     /*
     Comments
     */
+    public static String MATCHID = "matchId";
     public static String COMMENT_MATCHID = "matchId";
     public static String COMMENT_TEXT = "value"; //OBS OBS, comment med feil her
     public static String COMMENT_TAG = "tag";
     public static String COMMENT_IMAGESOURCE = "imgSrc";
+    public static String SCORE_TEAM1 = "score1";
+    public static String SCORE_TEAM2 = "score2";
+    public static String SCORE_DATE = "time";
+    
     
 
 }

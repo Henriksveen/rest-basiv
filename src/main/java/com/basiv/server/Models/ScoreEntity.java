@@ -1,12 +1,15 @@
 package com.basiv.server.Models;
 
 import java.util.Date;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
+
 
 /**
  * @author Henriksveen
  */
+
+@Embedded
 public class ScoreEntity {
 
     private int score1 = 0;

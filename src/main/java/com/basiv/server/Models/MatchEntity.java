@@ -2,11 +2,9 @@ package com.basiv.server.Models;
 
 import java.util.Date;
 import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Index;
-import org.mongodb.morphia.annotations.Indexes;
 import org.mongodb.morphia.annotations.Property;
 
 /**
@@ -23,7 +21,8 @@ public class MatchEntity {
     private boolean isLive;
     private String matchName;
     private TeamEntity[] teams;
-    private ScoreEntity[] score;
+    @Embedded
+    private List<ScoreEntity> score;
     private String category;
     private String twitchUrl;
     private String description;
@@ -33,7 +32,7 @@ public class MatchEntity {
     public MatchEntity() {
 
     }
-
+    
     public String getMatchName() {
         return matchName;
     }
@@ -82,11 +81,11 @@ public class MatchEntity {
         this.teams = teams;
     }
 
-    public ScoreEntity[] getScore() {
+    public List<ScoreEntity> getScore() {
         return score;
     }
 
-    public void setScore(ScoreEntity[] score) {
+    public void setScore(List<ScoreEntity> score) {
         this.score = score;
     }
 

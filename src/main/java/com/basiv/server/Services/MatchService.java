@@ -5,6 +5,7 @@ import com.basiv.server.Models.MatchEntity;
 import com.basiv.server.Models.ScoreEntity;
 import com.basiv.server.Models.TeamEntity;
 import com.basiv.server.config.MongoDB;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class MatchService {
         }
         return match;
     }
-
+ 
     public List<MatchEntity> getMatches() {
         return mongoDatastore.createQuery(MatchEntity.class).asList();
     }
@@ -50,8 +51,10 @@ public class MatchService {
             }
             counter++;
         }
-        ScoreEntity[] scoreTab = {new ScoreEntity()};
-        match.setScore(scoreTab);
+//        ScoreEntity[] scoreTab = {new ScoreEntity()};
+        ArrayList<ScoreEntity> temp = new ArrayList<>();
+        temp.add(new ScoreEntity());
+        match.setScore(temp);
         match.setTeams(helpArray);
         match.setId(UUID.randomUUID().toString());
         match.setDateCreated(new Date());
