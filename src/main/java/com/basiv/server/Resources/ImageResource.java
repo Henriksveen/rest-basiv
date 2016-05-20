@@ -26,30 +26,11 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 public class ImageResource {
 
     ImageService service = new ImageService();
-    
-    @GET
-    public List<MatchEntity> getMatches() {
-        System.out.println("LISTE!");
-        System.out.println("TEST");
-        return null;
-        //return Response.ok().entity(matchService.getMatches()).header("Access-Control-Allow-Origin", "*").build();
-    }
-    
-//    @OPTIONS
-//    public Response postImage(ImageEntity i, Request rq, @Context UriInfo uriInfo){
-//        
-//        System.out.println("NYTT BILDE!");
-//        URI uri = service.addImage(i, uriInfo);
-//        if(uri == null) return Response.serverError().build();
-//        return Response.created(uri).header("Access-Control-Allow-Origin", "*").build();
-//    }
-//    
      
     @GET
     @Path("{matchId}")
     public Response test(@PathParam("matchId") String id,  @Context UriInfo uriInfo) {
         System.out.println(uriInfo.getBaseUri()+uriInfo.getPathSegments().get(0).toString());
-                
         Response r = service.getImage(id);
         if(r != null){
             return r;
@@ -58,23 +39,8 @@ public class ImageResource {
 
     }
     
-//    @POST
-//    @Path("/upload")
-//    @Consumes(MediaType.MULTIPART_FORM_DATA)
-//    public Response addImage(Object obj) {
-//        //@FormDataParam("file") FormDataContentDisposition fileDetail
-//        //uploadedInputStream
-//        System.out.println("Mottatt multipart");
-//        return Response.serverError().build();
-//    }
-//    //    public Response addImage(ImageEntity i, @Context UriInfo uriInfo){
-////        System.out.println("NYTT BILDE!");
-////        URI uri = service.addImage(i, uriInfo);
-////        return Response.created(uri).header("Access-Control-Allow-Origin", "*").build();
-////    }
     @POST
     @Path("/upload")
-    //@Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(
         @FormDataParam("file") InputStream uploadedInputStream,
         @FormDataParam("file") FormDataContentDisposition fileDetail,

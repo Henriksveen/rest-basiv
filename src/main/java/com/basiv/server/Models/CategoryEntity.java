@@ -13,6 +13,7 @@ public class CategoryEntity {
     private String id;
     private String categoryName;
     private String[] hashtags;
+    private String imgSrc;
 
     public CategoryEntity() {
 
@@ -40,5 +41,13 @@ public class CategoryEntity {
 
     public void setHashtags(String[] hashtags) {
         this.hashtags = hashtags;
+    }
+
+    public String getImgSrc() {
+        return imgSrc;
+    }
+
+    public void setImgSrc(String imgSrc) {
+        this.imgSrc = imgSrc;
     }
 }

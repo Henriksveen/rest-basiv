@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
+import org.mongodb.morphia.query.Query;
 
 /**
  * @author Henriksveen
@@ -32,7 +33,11 @@ public class MatchService {
         }
         return match;
     }
- 
+
+    public List<MatchEntity> getCategoryMatches(String categoryName) {
+        return mongoDatastore.createQuery(MatchEntity.class).filter("category", categoryName).asList();
+    }
+
     public List<MatchEntity> getMatches() {
         return mongoDatastore.createQuery(MatchEntity.class).asList();
     }
