@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.basiv.server.Resources;
 
 import com.basiv.server.Exceptions.DataNotFoundException;
-import com.basiv.server.Services.CategoryService;
+import com.basiv.server.Services.MatchService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,21 +11,22 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- *
  * @author Henriksveen
  */
-@Path("/hashtags")
+@Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class HashtagResource {
+public class MatchCategoryResource {
 
-    CategoryService categoryService = new CategoryService();
+    MatchService matchService = new MatchService();
 
     @GET
-    @Path("{categoryId}")
-    public Response getHashtagList(@PathParam("categoryId") String categoryId) {
+    public Response getCategoryMatches(@PathParam("categoryName") String categoryName) {
         try {
-            return Response.ok().entity(categoryService.getHashtagList(categoryId)).header("Access-Control-Allow-Origin", "*").build();
+            return Response.ok()
+                    .entity(matchService.getCategoryMatches(categoryName))
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         } catch (DataNotFoundException e) {
             return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
         }

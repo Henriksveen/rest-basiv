@@ -25,6 +25,7 @@ import com.basiv.socket.model.Comment;
 import com.basiv.server.Models.MatchEntity;
 import java.util.Collection;
 import com.basiv.socket.config.SocketConstants;
+import java.util.Date;
 import org.mongodb.morphia.Datastore;
 
 /**
@@ -187,6 +188,7 @@ public class CommentSessionHandler {
             comment.setMatchId(jsonMessage.getString(SocketConstants.COMMENT_MATCHID));
             comment.setValue(jsonMessage.getString(SocketConstants.COMMENT_TEXT));
             comment.setTag(jsonMessage.getString(SocketConstants.COMMENT_TAG));
+            comment.setCommentTime(new Date());
             if (jsonMessage.containsKey(SocketConstants.COMMENT_IMAGESOURCE)) {
                 if(!jsonMessage.isNull(SocketConstants.COMMENT_IMAGESOURCE)) 
                     comment.setImgSrc(jsonMessage.getString("imgSrc"));

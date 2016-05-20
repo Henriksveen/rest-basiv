@@ -33,7 +33,11 @@ public class MatchResource {
 
     @GET
     public Response getMatches() {
-        return Response.ok().entity(matchService.getMatches()).header("Access-Control-Allow-Origin", "*").build();
+        try {
+            return Response.ok().entity(matchService.getMatches()).header("Access-Control-Allow-Origin", "*").build();
+        } catch (DataNotFoundException e) {
+            return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
+        }
     }
 
     @GET
@@ -74,7 +78,6 @@ public class MatchResource {
         rb.header("Access-Control-Allow-Origin", "*");
         rb.header("Access-Control-Allow-Methods", "POST");
         rb.header("Access-Control-Allow-Headers", "accept, access-control-allow-origin, content-type, token, googleid");
-//        rb.header("Access-Control-Allow-Headers", "accept, access-control-allow-headers, access-control-allow-origin, content-type");
         return rb.build();
     }
 
