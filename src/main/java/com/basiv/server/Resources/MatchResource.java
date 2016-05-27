@@ -39,6 +39,18 @@ public class MatchResource {
             return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
         }
     }
+    @GET
+    @Path("{matchId}/comments")
+    public Response getComments(@PathParam("matchId") String matchId) {
+        try {
+            return Response.ok()
+                    .entity(matchService.getMatchComments(matchId))
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
+        } catch (DataNotFoundException e) {
+            return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
+        }
+    }
 
     @GET
     @Path("{matchId}")
