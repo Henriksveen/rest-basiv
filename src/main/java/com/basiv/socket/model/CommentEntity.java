@@ -6,6 +6,7 @@
 
 package com.basiv.socket.model;
 
+import java.util.Date;
 import org.mongodb.morphia.annotations.Embedded;
 
 /**
@@ -16,6 +17,7 @@ import org.mongodb.morphia.annotations.Embedded;
 public class CommentEntity {
     String matchId;
     String value;
+    long commentTime;
 
     public String getMatchId() {
         return matchId;
@@ -32,6 +34,16 @@ public class CommentEntity {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public long getCommentTime() {
+        return commentTime;
+    }
+
+    public void setCommentTime(long commentTime) {
+        this.commentTime = commentTime;
+    }
+
+
 
     
 }

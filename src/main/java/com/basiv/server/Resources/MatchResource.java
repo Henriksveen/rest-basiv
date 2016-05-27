@@ -70,7 +70,7 @@ public class MatchResource {
     public Response addMatch(MatchEntity match, @Context UriInfo uriInfo, @HeaderParam("googleId") String googleId, @HeaderParam("token") String token) {
         System.out.println("beskrivelse:" + match.getDescription());
         if (authService.checkToken(googleId, token)) {
-            MatchEntity newMatch = matchService.addMatch(match);
+            MatchEntity newMatch = matchService.addMatch(match,googleId);
             if (newMatch == null) {
                 return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
             }

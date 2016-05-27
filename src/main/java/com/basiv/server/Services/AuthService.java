@@ -6,6 +6,7 @@
 package com.basiv.server.Services;
 
 import com.basiv.server.Models.AuthEntity;
+import com.basiv.server.Models.ProfileEntity;
 import com.basiv.server.Models.UserEntity;
 import com.basiv.server.Models.ValidatedToken;
 import com.basiv.server.config.MongoDB;
@@ -16,18 +17,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Scanner;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import org.json.JSONObject;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 
@@ -90,14 +86,16 @@ public class AuthService {
 
                     //UserEntity user = mongoDatastore.get(UserEntity.class, obj.getString("user_id"));
                     UserEntity user = mongoDatastore.createQuery(UserEntity.class).filter("googleId", obj.getString("user_id")).get();
-
                     if (user == null) {
                         //TODO sjekk database om user_id finnes fra før også
                         user = new UserEntity();
+                        //Oppretter profil til bruker
+                        ProfileEntity profile = createProfile(ent);
                         user.setId(UUID.randomUUID().toString());
-
+                        user.setProfile(profile.getId());
                         user.setGoogleId(obj.getString("user_id"));
                         mongoDatastore.save(user);
+                        mongoDatastore.save(profile);
                     }//Mer logikk her?
                     return user;
                 }
@@ -110,6 +108,30 @@ public class AuthService {
             return null;
         }
         return null;
+    }
+    
+    private ProfileEntity createProfile(AuthEntity ent) {
+        ProfileEntity profile = new ProfileEntity();
+        try {
+            profile.setId(UUID.randomUUID().toString());
+            profile.setRank("Creator");
+            //Connect googleapis for user info
+            URLConnection con = new URL("https://www.googleapis.com/oauth2/v2/userinfo").openConnection();
+            con.setRequestProperty("Accept-Charset", "UTF-8");
+            con.setRequestProperty("Authorization", "Bearer " + ent.getAccess_token());
+            InputStream response = con.getInputStream();
+            JsonObject obj;
+            try (JsonReader reader = Json.createReader(response)) {
+                obj = reader.readObject();
+            }
+            profile.setName(obj.getString("name"));
+            profile.setImage(obj.getString("picture"));
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(AuthService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AuthService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return profile;
     }
 
     private boolean isTokenExpired(String user_id) {
@@ -169,5 +191,4 @@ public class AuthService {
         token.setExpires_at(getExpiresAt(obj.getInt("expires_in")));
         return token;
     }
-
 }

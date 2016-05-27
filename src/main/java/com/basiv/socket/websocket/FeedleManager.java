@@ -227,7 +227,7 @@ public class FeedleManager {
     private void updatescore(Session session, JsonObject jsonMessage) {
         if (jsonMessage.containsKey(SocketConstants.COMMENT_MATCHID)) {
             //If feedle is created, send to feedle
-            if (feedleList.containsKey(SocketConstants.COMMENT_MATCHID)) {
+            if (feedleList.containsKey(jsonMessage.getString(SocketConstants.COMMENT_MATCHID))) {
                 feedleList.get(jsonMessage.getString(SocketConstants.COMMENT_MATCHID))
                         .updateScore(session, jsonMessage);
             }

@@ -2,9 +2,14 @@ package com.basiv.server.Services;
 
 import com.basiv.server.Exceptions.DataNotFoundException;
 import com.basiv.server.Models.MatchEntity;
+import com.basiv.server.Models.ProfileEntity;
 import com.basiv.server.Models.ScoreEntity;
 import com.basiv.server.Models.TeamEntity;
+import com.basiv.server.Models.UserEntity;
 import com.basiv.server.config.MongoDB;
+import com.basiv.socket.model.Comment;
+import com.basiv.socket.model.CommentEntity;
+import com.basiv.socket.model.FeedleCommentsEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +18,8 @@ import java.util.logging.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
+import javax.ws.rs.core.GenericEntity;
+import org.mongodb.morphia.query.UpdateOperations;
 
 /**
  * @author Henriksveen
@@ -42,7 +49,7 @@ public class MatchService {
         return mongoDatastore.createQuery(MatchEntity.class).asList();
     }
 
-    public MatchEntity addMatch(MatchEntity match) {
+    public MatchEntity addMatch(MatchEntity match, String googleId) {
         System.out.println(match);
         TeamEntity[] helpArray = new TeamEntity[match.getTeams().length];
         int counter = 0;
@@ -63,6 +70,13 @@ public class MatchService {
         match.setScore(temp);
         match.setTeams(helpArray);
         match.setId(UUID.randomUUID().toString());
+        //Update profile.createdMatches with matchId
+        UserEntity user = mongoDatastore.createQuery(UserEntity.class).filter("googleId", googleId).get();
+        ProfileEntity profile = mongoDatastore.createQuery(ProfileEntity.class).filter("id", user.getProfile()).get();
+        Query<ProfileEntity> updateQuery = mongoDatastore.createQuery(ProfileEntity.class).field("id").equal(profile.getId());
+        UpdateOperations<ProfileEntity> update = mongoDatastore.createUpdateOperations(ProfileEntity.class).add("createdMatches", match.getId());
+        mongoDatastore.update(updateQuery, update);
+
         match.setDateCreated(new Date());
         match.setIsLive(false);
         match.setIsFinish(false);
@@ -84,5 +98,21 @@ public class MatchService {
             throw new DataNotFoundException("Match with id " + id + " notfound.");
         }
         mongoDatastore.delete(match);
+    }
+
+    public GenericEntity<List<Comment>> getMatchComments(String matchId) {
+        FeedleCommentsEntity entity = mongoDatastore.get(FeedleCommentsEntity.class, matchId);
+        if (entity == null) {
+            throw new DataNotFoundException("Comments with id " + matchId + " notfound.");
+        }
+//        List<Comment> com = entity.getComments();
+//        for (Comment com1 : com) {
+//            com1.setCommentTime(com1.getCommentTime().getTime());
+//        }
+
+        GenericEntity<List<Comment>> list = new GenericEntity<List<Comment>>(entity.getComments()) {
+        };
+        System.out.println(list);
+        return list;
     }
 }
