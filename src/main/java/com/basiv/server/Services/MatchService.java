@@ -5,6 +5,9 @@ import com.basiv.server.Models.MatchEntity;
 import com.basiv.server.Models.ScoreEntity;
 import com.basiv.server.Models.TeamEntity;
 import com.basiv.server.config.MongoDB;
+import com.basiv.socket.model.Comment;
+import com.basiv.socket.model.CommentEntity;
+import com.basiv.socket.model.FeedleCommentsEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.logging.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.Query;
+import javax.ws.rs.core.GenericEntity;
 
 /**
  * @author Henriksveen
@@ -81,5 +85,20 @@ public class MatchService {
             throw new DataNotFoundException("Match with id " + id + " notfound.");
         }
         mongoDatastore.delete(match);
+    }
+
+    public GenericEntity<List<Comment>> getMatchComments(String matchId) {
+        FeedleCommentsEntity entity = mongoDatastore.get(FeedleCommentsEntity.class, matchId);
+        if (entity == null) {
+            throw new DataNotFoundException("Comments with id " + matchId + " notfound.");
+        }
+//        List<Comment> com = entity.getComments();
+//        for (Comment com1 : com) {
+//            com1.setCommentTime(com1.getCommentTime().getTime());
+//        }
+            
+        GenericEntity<List<Comment>> list = new GenericEntity<List<Comment>>(entity.getComments()){};
+        System.out.println(list);
+        return list;
     }
 }

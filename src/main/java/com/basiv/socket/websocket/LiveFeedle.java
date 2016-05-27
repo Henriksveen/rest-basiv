@@ -13,6 +13,8 @@ import com.basiv.socket.model.Comment;
 import com.basiv.socket.model.CommentEntity;
 import com.basiv.socket.model.FeedleCommentsEntity;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,10 +94,10 @@ public class LiveFeedle {
             return null;
         }
     }
-    
-    public boolean isCreator(Session s){
-        for(Session creator: creators){
-            if(creator.getId().equals(s.getId())){
+
+    public boolean isCreator(Session s) {
+        for (Session creator : creators) {
+            if (creator.getId().equals(s.getId())) {
                 System.out.println("Creator found!! Matched id: " + creator.getId());
                 return true;
             }
@@ -104,17 +106,19 @@ public class LiveFeedle {
     }
 
     public void newMessage(Session session, JsonObject jsonMessage) {
-        
 
         System.out.println("New Feedle comment received on feedle id: " + id);
 //        checks if creator is already authenticated
-        if(!isCreator(session)) return;
+        if (!isCreator(session)) {
+            return;
+        }
         System.out.println("newmessage; creator found");
-        
+
         CommentEntity entity = jsonToEntity(jsonMessage);
         if (entity == null) {
             return;
         }
+        entity.setCommentTime(new Date().getTime());
         System.out.println("newmessage; sedning and storing");
         sendToSubscribers(buildJsonComment(entity, SocketConstants.ACTION_NEWCOMMENT));
         sendToDatabase(entity);
@@ -122,21 +126,25 @@ public class LiveFeedle {
     }
 
     private void sendToDatabase(CommentEntity entity) {
-        if(db.get(FeedleCommentsEntity.class, id) == null){
-          db.save(new FeedleCommentsEntity(id));
+        if (db.get(FeedleCommentsEntity.class, id) == null) {
+            db.save(new FeedleCommentsEntity(id));
         }
         Query<FeedleCommentsEntity> updateQuery = db.createQuery(FeedleCommentsEntity.class).field("_id").equal(id);
         UpdateOperations<FeedleCommentsEntity> update = db.createUpdateOperations(FeedleCommentsEntity.class).add("comments", entity);
         db.update(updateQuery, update);
-    }
+    } 
 
     //Create a json object. Not dynamic pt. 
     private JsonObject buildJsonComment(CommentEntity c, String action) {
         JsonProvider provider = JsonProvider.provider();
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm a z");
+        
         JsonObjectBuilder addMessage = provider.createObjectBuilder()
                 .add(SocketConstants.ACTION, action)
                 .add(SocketConstants.COMMENT_MATCHID, c.getMatchId())
-                .add(SocketConstants.COMMENT_TEXT, c.getValue());
+                .add(SocketConstants.COMMENT_TEXT, c.getValue())
+//                .add("commentTime", formatter.format(c.getCommentTime()));
+                .add("commentTime", c.getCommentTime());
         return addMessage.build();
     }
 
@@ -177,8 +185,10 @@ public class LiveFeedle {
     }
 
     public void updateScore(Session session, JsonObject jsonMessage) {
-        if(!isCreator(session)) return;
-        
+        if (!isCreator(session)) {
+            return;
+        }
+
         System.out.println("updatescore called on feedle id: " + id);
         ScoreEntity e = new ScoreEntity();
         e.setScore1(jsonMessage.getJsonObject("score").getInt(SocketConstants.SCORE_TEAM1));
@@ -194,7 +204,8 @@ public class LiveFeedle {
         UpdateOperations<MatchEntity> update = db.createUpdateOperations(MatchEntity.class).add("score", s);
         db.update(updateQuery, update);
     }
-        private JsonObject buildJsonScore(ScoreEntity e, String action) {
+
+    private JsonObject buildJsonScore(ScoreEntity e, String action) {
         JsonProvider provider = JsonProvider.provider();
         JsonObjectBuilder addMessage = provider.createObjectBuilder()
                 .add(SocketConstants.ACTION, action)
@@ -204,18 +215,18 @@ public class LiveFeedle {
         return addMessage.build();
     }
 
-
     String getId() {
         return id;
     }
 
     void setLive(boolean live) {
         isLive = live;
-        if(!live){
+        if (!live) {
             //TODO close sessions?
         }
     }
-    boolean isLive(){
+
+    boolean isLive() {
         return isLive;
     }
 
@@ -223,4 +234,3 @@ public class LiveFeedle {
         return creators;
     }
 }
-

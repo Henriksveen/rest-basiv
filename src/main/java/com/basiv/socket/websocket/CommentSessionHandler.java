@@ -5,7 +5,6 @@
  */
 package com.basiv.socket.websocket;
 
-import com.basiv.server.Models.EventEntities;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
