@@ -143,7 +143,6 @@ public class FeedleManager {
         } else {
             LiveFeedle newFeedle = new LiveFeedle(jsonMessage.getString(SocketConstants.COMMENT_MATCHID),
                     waitingPool.get(jsonMessage.getString(SocketConstants.COMMENT_MATCHID)), db);
-            newFeedle.setLive(true);
             newFeedle.addCreator(session);
             feedleList.put(newFeedle.getId(), newFeedle);
             System.out.println("New feedle setup");
@@ -164,7 +163,7 @@ public class FeedleManager {
     void activate(Session session, JsonObject jsonMessage) {
         if (feedleList.containsKey(jsonMessage.getString(SocketConstants.COMMENT_MATCHID))) {
             if (feedleList.get(jsonMessage.getString(SocketConstants.COMMENT_MATCHID)).isCreator(session)) {
-                feedleList.get(jsonMessage.getString(SocketConstants.COMMENT_MATCHID)).setLive(true);
+                feedleList.get(jsonMessage.getString(SocketConstants.COMMENT_MATCHID)).setLive(true, jsonMessage);
             }
         }
     }
@@ -172,7 +171,7 @@ public class FeedleManager {
     void deactivate(Session session, JsonObject jsonMessage) {
         if (feedleList.containsKey(jsonMessage.getString(SocketConstants.COMMENT_MATCHID))) {
             if (feedleList.get(jsonMessage.getString(SocketConstants.COMMENT_MATCHID)).isCreator(session)) {
-                feedleList.get(jsonMessage.getString(SocketConstants.COMMENT_MATCHID)).setLive(false);
+                feedleList.get(jsonMessage.getString(SocketConstants.COMMENT_MATCHID)).setLive(false, jsonMessage);
             }
         }
     }

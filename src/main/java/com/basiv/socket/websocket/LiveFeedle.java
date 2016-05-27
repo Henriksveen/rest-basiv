@@ -219,11 +219,19 @@ public class LiveFeedle {
         return id;
     }
 
-    void setLive(boolean live) {
+    void setLive(boolean live, JsonObject jsonMessage) {
         isLive = live;
         if (!live) {
             //TODO close sessions?
         }
+        MatchEntity match = db.get(MatchEntity.class, jsonMessage.getString(SocketConstants.MATCHID));
+        if(match != null){
+            match.setIsLive(isLive);
+            UpdateOperations<MatchEntity> update = db.createUpdateOperations(MatchEntity.class).set("isLive", isLive);
+            System.out.println("de/activation result = " + db.update(match, update).getUpdatedExisting());
+        }
+        System.out.println("deactivate; sending and storing");
+        sendToSubscribers(jsonMessage);
     }
 
     boolean isLive() {
