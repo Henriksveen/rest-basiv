@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.basiv.server.Resources;
 
 import com.basiv.server.Models.ProfileEntity;
@@ -20,15 +19,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * 
+ *
  * @author Ivar Østby
  */
 @Path("/profile")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProfileResource {
+
     ProfileService service = new ProfileService();
-    
+
     @GET
     @Path("{profileId}")
     public Response getProfile(@PathParam("profileId") String id) {
@@ -36,9 +36,15 @@ public class ProfileResource {
 
         return service.getProfile(id).header("Access-Control-Allow-Origin", "*").build();
     }
-    
+
+    @GET
+    @Path("{profileId}/matches")
+    public Response getMatches(@PathParam("profileId") String id) {
+        return Response.ok().entity(service.getMatches(id)).header("Access-Control-Allow-Origin", "*").build();
+    }
+
     @POST
-    public Response postProfile(ProfileEntity entity){
+    public Response postProfile(ProfileEntity entity) {
         System.out.println("POST PROFILE");
         return service.addProfile(entity).header("Access-Control-Allow-Origin", "*").build();
     }

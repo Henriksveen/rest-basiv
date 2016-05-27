@@ -43,6 +43,7 @@ public class MatchService {
     }
 
     public MatchEntity addMatch(MatchEntity match) {
+        System.out.println(match);
         TeamEntity[] helpArray = new TeamEntity[match.getTeams().length];
         int counter = 0;
         for (TeamEntity t : match.getTeams()) {
@@ -63,6 +64,8 @@ public class MatchService {
         match.setTeams(helpArray);
         match.setId(UUID.randomUUID().toString());
         match.setDateCreated(new Date());
+        match.setIsLive(false);
+        match.setIsFinish(false);
         Key k = mongoDatastore.save(match);
         if (k == null) {
             return null;

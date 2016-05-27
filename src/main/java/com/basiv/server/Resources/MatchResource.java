@@ -6,6 +6,7 @@ import com.basiv.server.Services.AuthService;
 import com.basiv.server.Services.MatchService;
 import java.net.URI;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -55,6 +56,7 @@ public class MatchResource {
 
     @POST
     public Response addMatch(MatchEntity match, @Context UriInfo uriInfo, @HeaderParam("googleId") String googleId, @HeaderParam("token") String token) {
+        System.out.println("beskrivelse:" + match.getDescription());
         if (authService.checkToken(googleId, token)) {
             MatchEntity newMatch = matchService.addMatch(match);
             if (newMatch == null) {

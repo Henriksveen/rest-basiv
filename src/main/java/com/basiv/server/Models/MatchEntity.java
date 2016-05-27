@@ -19,6 +19,7 @@ public class MatchEntity {
     private Date dateCreated;
     private Date liveStart;
     private boolean isLive;
+    private boolean isFinish;
     private String matchName;
     private TeamEntity[] teams;
     @Embedded
@@ -63,6 +64,14 @@ public class MatchEntity {
 
     public void setIsLive(boolean isLive) {
         this.isLive = isLive;
+    }
+
+    public boolean isIsFinish() {
+        return isFinish;
+    }
+
+    public void setIsFinish(boolean isFinish) {
+        this.isFinish = isFinish;
     }
 
     public String getId() {

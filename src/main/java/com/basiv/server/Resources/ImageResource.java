@@ -26,42 +26,42 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 public class ImageResource {
 
     ImageService service = new ImageService();
-     
+
     @GET
     @Path("{matchId}")
-    public Response test(@PathParam("matchId") String id,  @Context UriInfo uriInfo) {
-        System.out.println(uriInfo.getBaseUri()+uriInfo.getPathSegments().get(0).toString());
+    public Response test(@PathParam("matchId") String id, @Context UriInfo uriInfo) {
+        System.out.println(uriInfo.getBaseUri() + uriInfo.getPathSegments().get(0).toString());
         Response r = service.getImage(id);
-        if(r != null){
+        if (r != null) {
             return r;
         }
         return Response.serverError().build();
 
     }
-    
+
     @POST
     @Path("/upload")
     public Response uploadFile(
-        @FormDataParam("file") InputStream uploadedInputStream,
-        @FormDataParam("file") FormDataContentDisposition fileDetail,
-        @Context UriInfo uriInfo) {
+            @FormDataParam("file") InputStream uploadedInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail,
+            @Context UriInfo uriInfo) {
         URI uri = service.addImage(uploadedInputStream, fileDetail, uriInfo);
-        if(uri != null){
-            return Response.created(uri).header("Access-Control-Allow-Origin", "*").build();
-        }else{
+        if (uri != null) {
+            return Response.created(uri).header("Access-Control-Allow-Origin", "*").header("Access-Control-Expose-Headers", "Location").build();
+        } else {
             return Response.serverError().build();
         }
     }
-    
+
     @OPTIONS
     @Path("/upload")
-    public Response acceptPost(){
+    public Response acceptPost() {
         Response.ResponseBuilder rb = Response.ok();
-            rb.header("Access-Control-Allow-Origin", "*");
-            rb.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-            rb.header("Access-Control-Max-Age", "86400");
-            rb.header("Access-Control-Request-Headers", "content-type");
-            return rb.build();
+        rb.header("Access-Control-Allow-Origin", "*");
+        rb.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        rb.header("Access-Control-Max-Age", "86400");
+        rb.header("Access-Control-Request-Headers", "content-type");
+        return rb.build();
     }
-    
+
 }
