@@ -36,6 +36,7 @@ public class MatchService {
     public MatchEntity getMatch(String id) {
         MatchEntity match = mongoDatastore.get(MatchEntity.class, id);
         if (match == null) {
+
             throw new DataNotFoundException("Match with id " + id + " notfound.");
         }
         return match;

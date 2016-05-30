@@ -132,18 +132,18 @@ public class LiveFeedle {
         Query<FeedleCommentsEntity> updateQuery = db.createQuery(FeedleCommentsEntity.class).field("_id").equal(id);
         UpdateOperations<FeedleCommentsEntity> update = db.createUpdateOperations(FeedleCommentsEntity.class).add("comments", entity);
         db.update(updateQuery, update);
-    } 
+    }
 
     //Create a json object. Not dynamic pt. 
     private JsonObject buildJsonComment(CommentEntity c, String action) {
         JsonProvider provider = JsonProvider.provider();
 //        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm a z");
-        
+
         JsonObjectBuilder addMessage = provider.createObjectBuilder()
                 .add(SocketConstants.ACTION, action)
                 .add(SocketConstants.COMMENT_MATCHID, c.getMatchId())
                 .add(SocketConstants.COMMENT_TEXT, c.getValue())
-//                .add("commentTime", formatter.format(c.getCommentTime()));
+                //                .add("commentTime", formatter.format(c.getCommentTime()));
                 .add("commentTime", c.getCommentTime());
         return addMessage.build();
     }
@@ -194,7 +194,7 @@ public class LiveFeedle {
         e.setScore1(jsonMessage.getJsonObject("score").getInt(SocketConstants.SCORE_TEAM1));
         e.setScore2(jsonMessage.getJsonObject("score").getInt(SocketConstants.SCORE_TEAM2));
         e.setTime(new Date());
-        sendToSubscribers(buildJsonScore(e, SocketConstants.ACTION_NEWCOMMENT));
+        sendToSubscribers(buildJsonScore(e, SocketConstants.ACTION_UPDATESCORE));
         storeScore(e);
 
     }
@@ -225,7 +225,7 @@ public class LiveFeedle {
             //TODO close sessions?
         }
         MatchEntity match = db.get(MatchEntity.class, jsonMessage.getString(SocketConstants.MATCHID));
-        if(match != null){
+        if (match != null) {
             match.setIsLive(isLive);
             UpdateOperations<MatchEntity> update = db.createUpdateOperations(MatchEntity.class).set("isLive", isLive);
             System.out.println("de/activation result = " + db.update(match, update).getUpdatedExisting());
