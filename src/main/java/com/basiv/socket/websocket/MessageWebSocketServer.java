@@ -22,11 +22,11 @@ import javax.websocket.server.ServerEndpoint;
 import com.basiv.socket.model.Message;
 
 /**
- *
+ * Deprecated
  * @author Ivar Østby
  */
-@ApplicationScoped
-@ServerEndpoint("/chat")
+//@ApplicationScoped
+//@ServerEndpoint("/chat")
 
 public class MessageWebSocketServer {
 

@@ -21,10 +21,10 @@ import javax.websocket.Session;
 import com.basiv.socket.model.Message;
 
 /**
- *
+ * Deprecated
  * @author Ivar Østby
  */
-@ApplicationScoped
+//@ApplicationScoped
 public class MessageSessionHandler {
 
     private int messageId = 0;

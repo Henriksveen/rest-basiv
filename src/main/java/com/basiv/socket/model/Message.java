@@ -18,6 +18,7 @@ public class Message {
     String id;
     String sentAt;
     String author;
+    String rank;
     String text;
     JsonObject thread;
 

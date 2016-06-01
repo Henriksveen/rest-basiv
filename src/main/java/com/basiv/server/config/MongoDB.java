@@ -21,7 +21,7 @@ public class MongoDB {
     private final Datastore datastore;
     public static final String DB_NAME = "rest";
 
-    private MongoDB() {
+    public MongoDB() {
         MongoClientOptions mongoOptions = MongoClientOptions.builder().socketTimeout(60000)
                 .connectTimeout(1200000).build(); // SocketTimeout: 60s, ConnectionTimeout: 20min
         MongoClient mongoClient;
