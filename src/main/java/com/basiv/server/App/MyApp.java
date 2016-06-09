@@ -8,6 +8,7 @@ import com.basiv.server.Resources.HashtagResource;
 import com.basiv.server.Resources.ImageResource;
 import com.basiv.server.Resources.MatchResource;
 import com.basiv.server.Resources.ProfileResource;
+import com.basiv.server.Resources.SearchResource;
 import com.basiv.server.Resources.TeamResource;
 import com.basiv.server.Resources.UserResource;
 import java.util.HashSet;
@@ -36,6 +37,7 @@ public class MyApp extends Application {
         resources.add(UserResource.class);
         resources.add(CategoryResource.class);
         resources.add(HashtagResource.class);
+        resources.add(SearchResource.class);
 
         // Add additional features such as support for Multipart.
         resources.add(MultiPartFeature.class);

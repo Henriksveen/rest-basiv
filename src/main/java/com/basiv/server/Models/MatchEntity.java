@@ -29,6 +29,7 @@ public class MatchEntity {
     private String description;
     private String imageSrc;
     private String eventEntitiesId;
+//    private String profileId;
 
     public MatchEntity() {
 

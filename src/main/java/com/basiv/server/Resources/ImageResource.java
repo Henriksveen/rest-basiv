@@ -1,28 +1,28 @@
 package com.basiv.server.Resources;
 
-import com.basiv.server.Models.MatchEntity;
 import com.basiv.server.Services.ImageService;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  * @author Henriksveen
  */
 @Path("/image")
+@Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
 public class ImageResource {
 
     ImageService service = new ImageService();

@@ -14,8 +14,8 @@ import javax.ws.rs.core.Response;
  * @author Henriksveen
  */
 @Path("/")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
 public class MatchCategoryResource {
 
     MatchService matchService = new MatchService();

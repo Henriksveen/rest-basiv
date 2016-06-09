@@ -2,9 +2,6 @@ package com.basiv.server.Models;
 
 import java.util.Date;
 import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-
-
 /**
  * @author Henriksveen
  */

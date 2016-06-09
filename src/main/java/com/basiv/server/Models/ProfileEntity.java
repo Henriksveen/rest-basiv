@@ -1,23 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.basiv.server.Models;
 
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
 /**
- * 
  * @author Ivar Østby
  */
 @Entity("profiles")
 public class ProfileEntity {
+
     @Id
     String id;
-    String name, image, bio, rank;
+    String name;
+    String image, bio, rank;
     int points;
     String[] createdMatches;
 
@@ -76,7 +71,5 @@ public class ProfileEntity {
     public void setCreatedMatches(String[] createdMatches) {
         this.createdMatches = createdMatches;
     }
-    
-    
 
 }

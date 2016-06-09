@@ -22,8 +22,8 @@ import javax.ws.rs.core.UriInfo;
  * @author Henriksveen
  */
 @Path("/teams")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
 public class TeamResource {
      TeamService teamService = new TeamService();
 

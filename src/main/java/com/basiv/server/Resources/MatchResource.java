@@ -6,7 +6,6 @@ import com.basiv.server.Services.AuthService;
 import com.basiv.server.Services.MatchService;
 import java.net.URI;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -25,8 +24,8 @@ import javax.ws.rs.core.UriInfo;
  * @author Henriksveen
  */
 @Path("/matches")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
 public class MatchResource {
 
     MatchService matchService = new MatchService();
@@ -40,6 +39,7 @@ public class MatchResource {
             return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
         }
     }
+
     @GET
     @Path("{matchId}/comments")
     public Response getComments(@PathParam("matchId") String matchId) {
@@ -70,7 +70,7 @@ public class MatchResource {
     public Response addMatch(MatchEntity match, @Context UriInfo uriInfo, @HeaderParam("googleId") String googleId, @HeaderParam("token") String token) {
         System.out.println("beskrivelse:" + match.getDescription());
         if (authService.checkToken(googleId, token)) {
-            MatchEntity newMatch = matchService.addMatch(match,googleId);
+            MatchEntity newMatch = matchService.addMatch(match, googleId);
             if (newMatch == null) {
                 return Response.status(404).header("Access-Control-Allow-Origin", "*").build();
             }
@@ -90,7 +90,7 @@ public class MatchResource {
     public Response acceptPost() {
         Response.ResponseBuilder rb = Response.ok();
         rb.header("Access-Control-Allow-Origin", "*");
-        rb.header("Access-Control-Allow-Methods", "POST");
+        rb.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         rb.header("Access-Control-Allow-Headers", "accept, access-control-allow-origin, content-type, token, googleid");
         return rb.build();
     }

@@ -71,8 +71,12 @@ public class MatchService {
         match.setScore(temp);
         match.setTeams(helpArray);
         match.setId(UUID.randomUUID().toString());
-        //Update profile.createdMatches with matchId
+        //Update user.createdMatches and profile.createdMatches with matchId
         UserEntity user = mongoDatastore.createQuery(UserEntity.class).filter("googleId", googleId).get();
+        Query<UserEntity> updateUserQuery = mongoDatastore.createQuery(UserEntity.class).field("id").equal(user.getId());
+        UpdateOperations<UserEntity> updateUser = mongoDatastore.createUpdateOperations(UserEntity.class).add("createdMatches", match.getId());
+        mongoDatastore.update(updateUserQuery, updateUser);
+
         ProfileEntity profile = mongoDatastore.createQuery(ProfileEntity.class).filter("id", user.getProfile()).get();
         Query<ProfileEntity> updateQuery = mongoDatastore.createQuery(ProfileEntity.class).field("id").equal(profile.getId());
         UpdateOperations<ProfileEntity> update = mongoDatastore.createUpdateOperations(ProfileEntity.class).add("createdMatches", match.getId());

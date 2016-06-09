@@ -1,6 +1,5 @@
 package com.basiv.server.Models;
 
-import java.util.List;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 

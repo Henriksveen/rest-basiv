@@ -94,6 +94,7 @@ public class AuthService {
                         user.setId(UUID.randomUUID().toString());
                         user.setProfile(profile.getId());
                         user.setGoogleId(obj.getString("user_id"));
+                        user.setNickname(profile.getName());
                         mongoDatastore.save(user);
                         mongoDatastore.save(profile);
                     }//Mer logikk her?

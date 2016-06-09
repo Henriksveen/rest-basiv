@@ -33,10 +33,10 @@ public class MongoDB {
         }
 
         //mongoClient.setWriteConcern(WriteConcern.SAFE);   //write operations will throw exceptions on failure 
-
         Morphia morphia = new Morphia().mapPackage("com.basiv.server.Models");
         morphia.map(ScoreEntity.class);
         datastore = morphia.createDatastore(mongoClient, DB_NAME);
+//        datastore.getDB().getCollection("profiles").createIndex({name:"name"});
         datastore.ensureIndexes();
         LOG.info("Connection to database '" + DB_NAME + "' initialized");
     }
