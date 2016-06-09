@@ -40,7 +40,7 @@ public class FeedleGatekeeper {
 
     @OnError
     public void onError(Throwable error) {
-        Logger.getLogger(CommentWebSocketServer.class.getName()).log(Level.SEVERE, null, error);
+        Logger.getLogger(FeedleGatekeeper.class.getName()).log(Level.SEVERE, null, error);
     }
 
     @OnMessage

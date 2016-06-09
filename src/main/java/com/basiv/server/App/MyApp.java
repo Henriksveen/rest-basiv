@@ -17,12 +17,15 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
+
 /**
  * @author Henriksveen
  */
 @ApplicationPath("webapi")
 public class MyApp extends Application {
-
+    
+    
+    
     @Override
     public Set<Class<?>> getClasses() {
 
@@ -43,10 +46,18 @@ public class MyApp extends Application {
         resources.add(MultiPartFeature.class);
         resources.add(ArrayListMessageBodyWriter.class);
         resources.add(StringListMessageBodyWriter.class);
-
+//        resources.add(ServiceFeature.class); 
         return resources;
     }
+    
 
+    @Override
+    public Set<Object> getSingletons() {
+        final Set<Object> resources = new HashSet<Object>();
+        // Add singletons.
+        
+        return resources;
+    }
 //    public MyApp(){
 //        this.getClasses().add(ImageResource.class);
 //        this.getClasses().add(Testt.class);

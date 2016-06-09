@@ -7,14 +7,10 @@ package com.basiv.socket.websocket;
 
 import com.basiv.server.Models.MatchEntity;
 import com.basiv.server.Models.ScoreEntity;
-import com.basiv.server.Models.UserEntity;
 import com.basiv.socket.config.SocketConstants;
-import com.basiv.socket.model.Comment;
 import com.basiv.socket.model.CommentEntity;
 import com.basiv.socket.model.FeedleCommentsEntity;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -155,9 +151,9 @@ public class LiveFeedle {
             session.getBasicRemote().sendText(message.toString());
         } catch (IOException ex) {
             sessions.remove(session);
-            Logger.getLogger(CommentSessionHandler.class.getName()).log(Level.WARNING, null, ex);
+            Logger.getLogger(LiveFeedle.class.getName()).log(Level.WARNING, null, ex);
         } catch (IllegalStateException ex) {
-            Logger.getLogger(CommentSessionHandler.class.getName()).log(Level.WARNING, null, ex);
+            Logger.getLogger(LiveFeedle.class.getName()).log(Level.WARNING, null, ex);
 
             //also remove faulty/closed connections
             closeSession(session);

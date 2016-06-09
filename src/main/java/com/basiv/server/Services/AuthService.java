@@ -75,7 +75,17 @@ public class AuthService {
                 obj = reader.readObject();
             }
 
-            if (!obj.isNull("issued_to") && !obj.isNull("user_id")) {
+            return validateResponse(obj, ent);
+
+        } catch (IOException ex) {
+            Logger.getLogger(AuthService.class.getName()).log(Level.WARNING, "Token rejected-> ", ex);
+            return null;
+        }
+        
+    }
+    
+    private UserEntity validateResponse(JsonObject obj, AuthEntity ent){
+        if (!obj.isNull("issued_to") && !obj.isNull("user_id")) {
                 if (obj.getString("issued_to").equals(CLIENTID)) {
                     LOG.log(Level.INFO, "Token validated: {0}", obj.getString("issued_to"));
                     LOG.log(Level.INFO, "Expires in: {0}", String.valueOf(obj.getInt("expires_in")));
@@ -103,11 +113,6 @@ public class AuthService {
             } else {
                 return null;
             }
-
-        } catch (IOException ex) {
-            Logger.getLogger(AuthService.class.getName()).log(Level.WARNING, "Token rejected-> ", ex);
-            return null;
-        }
         return null;
     }
     

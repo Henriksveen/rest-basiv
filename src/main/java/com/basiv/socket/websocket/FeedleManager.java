@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.basiv.socket.websocket;
 
 import com.basiv.server.Models.UserEntity;
@@ -10,16 +5,13 @@ import com.basiv.server.Models.ValidatedToken;
 import com.basiv.server.config.MongoDB;
 import com.basiv.socket.config.SocketConstants;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -102,7 +94,14 @@ public class FeedleManager {
     }
 
     void removeSession(Session session) {
-        //TODO: must be implemented to manage sessions
+        for(Object obj: feedleList.values().toArray()){
+            System.out.println("-- REMOVING CHATROOM: IF TEST -- ");
+            if(obj instanceof LiveFeedle){
+                System.out.println("-- REMOVING CHATROOM: IF TEST PASSED -- ");
+                LiveFeedle room = (LiveFeedle) obj;
+                room.removeSubscriber(session);
+            }
+        }
     }
 
     //User and token check before adding session as creator of feedle
@@ -113,14 +112,14 @@ public class FeedleManager {
         
         //FAILER
 //        if (!t.getToken().getAccess_token().equals(jsonMessage.getString("token"))) {
-//            return;
+//            return; 
 //        }
         System.out.println("Auth if 1 passed");
         if (isTokenExpired(t)) {
             return;
         }
         UserEntity user = db.createQuery(UserEntity.class).filter("googleId", jsonMessage.getString("user_id")).get();
-       
+        
         if (user == null) {
             return;
         }

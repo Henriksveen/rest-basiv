@@ -1,23 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.basiv.socket.model;
 
 import javax.json.JsonObject;
 
-
-
 /**
- * 
  * @author Ivar Østby
  */
 public class Message {
     String id;
     String sentAt;
     String author;
+    String rank;
     String text;
     JsonObject thread;
 
